@@ -162,7 +162,13 @@ export default class Arcade extends View {
     } catch (_) { /* not Linux: the meters stay hidden */ }
   }
 
+  // The pixel font is set here, on each role's root, not as the layout's ui_font: other mods
+  // (Ports, Docker, menus…) are sized for Herdr's own font and would come out too small.
   render(cx) {
+    return this.draw(cx).font_family(F.body);
+  }
+
+  draw(cx) {
     switch (this.role) {
       case "top": return this.top(cx);
       case "sidebar": return this.sidebar(cx);
