@@ -1,0 +1,253 @@
+{
+  "id": "root",
+  "type": "column",
+  "titlebar": "none",
+  "traffic_lights": [
+    18,
+    22
+  ],
+  "preview": "mods/arcade/preview.png",
+  "theme": "arcade",
+  "colors": {
+    "canvas": "#00000000",
+    "chrome": "#120733f0",
+    "surface": "#120733e8",
+    "background": "#0d0221",
+    "border": "#7b2cbf",
+    "input": "#05d9e8",
+    "hover": "#ffffff14",
+    "selected": "#ff2a6d55",
+    "raised": "#1e0f4ef0",
+    "popover": "#120733fa",
+    "muted": "#bba9f0",
+    "dim": "#7d6bb3"
+  },
+  "terminal_padding": [
+    14,
+    12
+  ],
+  "terminal_opacity": 0,
+  "background": {
+    "image": "mods/arcade/arcade-bg.png",
+    "fit": "cover"
+  },
+  "padding": [
+    6,
+    10
+  ],
+  "gap": 0,
+  "children": [
+    {
+      "id": "top",
+      "type": "block",
+      "size": {
+        "px": 56
+      },
+      "window_drag": true,
+      "content": {
+        "mod": "arcade",
+        "props": {
+          "role": "top"
+        }
+      }
+    },
+    {
+      "id": "body",
+      "type": "row",
+      "gap": 10,
+      "resizable": true,
+      "children": [
+        {
+          "id": "sidebar",
+          "type": "block",
+          "size": {
+            "px": 276
+          },
+          "min": 230,
+          "max": 480,
+          "content": {
+            "mod": "arcade",
+            "props": {
+              "role": "sidebar"
+            }
+          }
+        },
+        {
+          "id": "work",
+          "type": "column",
+          "resizable": false,
+          "size": {
+            "weight": 1
+          },
+          "children": [
+            {
+              "id": "tabs",
+              "type": "block",
+              "size": {
+                "px": 40
+              },
+              "window_drag": true,
+              "content": {
+                "mod": "arcade",
+                "props": {
+                  "role": "tabs"
+                }
+              }
+            },
+            {
+              "id": "work-body",
+              "type": "row",
+              "padding": 0,
+              "gap": 12,
+              "resizable": true,
+              "children": [
+                {
+                  "id": "main",
+                  "type": "block",
+                  "content": {
+                    "tab": "active",
+                    "pane": {
+                      "gap": 12,
+                      "radius": 0,
+                      "background": "#0e0628f0",
+                      "lone": true,
+                      "border": {
+                        "width": 2,
+                        "color": "#7b2cbf"
+                      },
+                      "focus": {
+                        "width": 2,
+                        "color": "#05d9e8"
+                      },
+                      "header": {
+                        "content": {
+                          "mod": "arcade",
+                          "props": {
+                            "role": "pane"
+                          }
+                        },
+                        "height": 38,
+                        "position": "top",
+                        "reveal": "always"
+                      }
+                    }
+                  }
+                },
+                {
+                  "id": "panel",
+                  "type": "column",
+                  "hidden": true,
+                  "size": {
+                    "px": 368
+                  },
+                  "min": 280,
+                  "max": 900,
+                  "children": [
+                    {
+                      "id": "panel-body",
+                      "type": "stack",
+                      "active": "files",
+                      "children": [
+                        {
+                          "id": "files",
+                          "type": "block",
+                          "content": {
+                            "mod": "files"
+                          }
+                        },
+                        {
+                          "id": "changes",
+                          "type": "block",
+                          "content": {
+                            "mod": "changes"
+                          }
+                        }
+                      ]
+                    }
+                  ],
+                  "background": "#120733e8",
+                  "border": {
+                    "width": 2,
+                    "color": "#7b2cbf"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "session",
+          "type": "column",
+          "size": {
+            "px": 330
+          },
+          "min": 260,
+          "max": 520,
+          "resizable": false,
+          "children": [
+            {
+              "id": "side-tabs",
+              "type": "block",
+              "size": {
+                "px": 40
+              },
+              "content": {
+                "mod": "arcade",
+                "props": {
+                  "role": "sidetabs"
+                }
+              }
+            },
+            {
+              "id": "side-body",
+              "type": "stack",
+              "active": "side-session",
+              "children": [
+                {
+                  "id": "side-session",
+                  "type": "block",
+                  "content": {
+                    "mod": "arcade",
+                    "props": {
+                      "role": "session"
+                    }
+                  }
+                },
+                {
+                  "id": "side-tasks",
+                  "type": "block",
+                  "content": {
+                    "mod": "arcade",
+                    "props": {
+                      "role": "tasks"
+                    }
+                  },
+                  "background": "#120733e8",
+                  "border": {
+                    "width": 2,
+                    "color": "#7b2cbf"
+                  }
+                }
+              ],
+              "padding": null
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "status",
+      "type": "block",
+      "size": {
+        "px": 46
+      },
+      "content": {
+        "mod": "arcade",
+        "props": {
+          "role": "status"
+        }
+      }
+    }
+  ],
+  "ui_font": "VT323"
+}
