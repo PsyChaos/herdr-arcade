@@ -164,12 +164,7 @@
                         }
                       ]
                     }
-                  ],
-                  "background": "#120733e8",
-                  "border": {
-                    "width": 2,
-                    "color": "#7b2cbf"
-                  }
+                  ]
                 }
               ]
             }

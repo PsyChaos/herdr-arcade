@@ -31,8 +31,8 @@ export const STATUS = { working: C.cyan, blocked: C.yellow, done: C.lime, idle: 
 export const WORD = { working: "PLAYING", blocked: "CONTINUE?", done: "STAGE CLEAR", idle: "READY" };
 
 // Text in the heading font (caps, small sizes) and in the body font.
-export const pt = (text, size = 10, color = C.text) =>
-  div().flex_none().font_family(F.head).text_size(size).line_height(`${Math.round(size * 1.5)}px`).text_color(color).child(text);
+export const pt = (text, size = 10, color = C.text, lh = Math.round(size * 1.5)) =>
+  div().flex_none().font_family(F.head).text_size(size).line_height(`${lh}px`).text_color(color).child(text);
 export const vt = (text, size = 19, color = C.text) => div().font_family(F.body).text_size(size).text_color(color).child(text);
 
 // A hard pixel shadow under the element that follows it (both in a relative parent).

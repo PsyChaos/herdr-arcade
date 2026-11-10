@@ -421,9 +421,9 @@ export default class Arcade extends View {
       .when(!a, (el) => el.child(div().pt(4).child(pt("FOCUS A PLAYER'S PANE", 7, C.dim))))
       .when(Boolean(a), (el) => el
         // the score line: tokens in, big, like a high score
-        .when(Boolean(s.up), (el) => el.child(h_flex().h(30).mt(2).mb(4).px(8).gap(12).items_center().justify_center().bg("#ffd3191a").border(2).border_color("#ffd31955")
-          .child(pt("SCORE", 8, C.yellow)).child(pt(up(s.up), 11, C.text))
-          .child(pt(`↓${up(s.down)}`, 7, C.muted))))
+        .when(Boolean(s.up), (el) => el.child(h_flex().h(30).mt(2).mb(4).px(8).pt(4).gap(12).items_center().justify_center().bg("#ffd3191a").border(2).border_color("#ffd31955")
+          .child(pt("SCORE", 8, C.yellow, 8)).child(pt(up(s.up), 11, C.text, 11))
+          .child(pt(`↓${up(s.down)}`, 7, C.muted, 7))))
         .child(row("PLAYER", a.program?.name ?? a.app ?? "agent", programIcon(a.program, 14)))
         .child(row("STAGE", short(pane?.cwd) || space?.name, icon("folder", 14, C.cyan)))
         .child(row("WORLD", `${space?.name ?? ""} · ${space?.machine ?? "This computer"}`))
