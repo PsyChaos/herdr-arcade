@@ -4,7 +4,7 @@
 //   "tabs"     the shown space's tabs as pixel buttons
 //   "session"  the focused agent's run: NOW PLAYING, MOVE LIST, SCREEN
 //   "status"   the score bar: machine, stage (branch), players, CPU, RAM, score, START
-//   "pane"     each pane's header: program, folder, status chip, +, Files, Changes, ⋮
+//   "pane"     each pane's header: program, folder, status chip, +, Files, Changes, menu
 //   "sidetabs" the right column's SESSION / TASKS switch
 //   "bell"     the MESSAGES popup;  "tasks" stands in for task-board until it is found
 // Run details (model, effort, context, tokens) come from the agent's own screen
@@ -16,7 +16,7 @@ import {
   agents, spaces, panes, focused, terminals, machines, layout,
   run, props, hc, exec, readTextFile, keys, window, home, appHome, openOverlay, closeOverlay,
 } from "herdr";
-import { A, C, F, STATUS, WORD, pt, vt, frame, button, hpBar, meter, icon, programIcon, letterTile, statusMark, chip, ago } from "./ui.js";
+import { A, C, F, STATUS, WORD, pt, frame, button, hpBar, meter, icon, programIcon, letterTile, statusMark, chip, ago } from "./ui.js";
 
 const stop = (_e, cx) => cx.stop_propagation();
 
@@ -576,7 +576,8 @@ export default class Arcade extends View {
     const list = agents();
     const working = list.filter((a) => a.status === "working").length;
     const needs = list.filter((a) => a.status === "blocked").length;
-    const s = this.screen;
+    const shown = this.target();
+    const s = shown && this.screen.address === shown.address ? this.screen : {};
     const label = (t, color = C.dim) => pt(t, 7, color);
     const value = (t, color = C.text) => div().font_family(F.body).text_size(20).text_color(color).child(t);
     const item = (...kids) => h_flex().gap(8).items_center().flex_none().children(kids);

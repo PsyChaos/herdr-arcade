@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Demo agent for the Quantum preview: prints a Claude-Code-like screen and reports a status (OSC 7501).
+# Demo agent for the layout's preview: prints a Claude-Code-like screen and reports a status (OSC 7501).
 state=${1:-working}
 osc(){ printf '\e]7501;state=%s:app=claude-code\a' "$1"; }
 osc "$state"
