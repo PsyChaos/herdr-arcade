@@ -324,7 +324,6 @@ export default class Arcade extends View {
     const agentRow = (a) => {
       const subs = kids.get(a.address) ?? [];
       const folded = this.folded.has(a.address);
-      const machine = a.address.includes("/") ? a.address.split("/")[0] : "";
       const detail = `${a.space_name}${a.tab_name && !/^\d+$/.test(a.tab_name) ? " · " + a.tab_name : ""}`;
       const color = STATUS[a.status] ?? C.dim;
       const n = order.indexOf(a.address) + 1;
@@ -337,7 +336,6 @@ export default class Arcade extends View {
         .child(div().id(`a-fold-${a.address}`).when(subs.length > 0, (el) => el.on_click(fold))
           .child(programIcon(a.program, 15) ?? icon("terminal", 15, C.muted)))
         .child(div().flex_1().min_w(0).truncate().font_family(F.body).text_size(20).text_color(a.status === "idle" && !a.focused ? C.muted : C.text).child(detail))
-        .when(Boolean(machine), (el) => el.child(div().max_w(92).truncate().font_family(F.body).text_size(16).text_color(C.dim).child(machine)))
         .when(subs.length > 0, (el) => el.child(div().id(`a-foldc-${a.address}`).font_family(F.body).text_size(17).text_color(C.dim)
           .on_click(fold).child(folded ? `+${subs.length}` : "−")))
         .child(div().w(26).flex_none().text_right().font_family(F.body).text_size(16).text_color(C.dim).child(ago(tabOf(a)?.changed_at)))
