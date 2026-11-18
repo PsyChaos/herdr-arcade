@@ -9,7 +9,7 @@ VT323 terminal font. Agents are **players** (P1, P2…): **PLAYING** while they 
 bottom: a title bar with the HERDR wordmark, a centred command search, CREDIT and a bell; then
 three columns: workspaces and players on the left, the active tab's panes in the middle (each in
 its own frame with a header), and the **SESSION** panel on the right (NOW PLAYING with a SCORE
-and an HP bar, MOVE LIST, SCREEN; plus a **TASKS** tab when the task-board mod is installed);
+and an HP bar, MOVE LIST, SCREEN; plus a **TASKS** tab when the deck mod is installed);
 then a score bar with machine, stage, players, CPU, RAM, SCORE and a yellow START button. All
 artwork (background, icons, logo, coin) is original: no existing game's characters or sprites.
 
@@ -121,7 +121,7 @@ terminals are drawn at opacity 0, so the picture shows through every gap.
          frame over `#0d0221`, Herdr's UI font 2px larger than the shipped panels (rows 29px).
 
    - **Right column, 330px** (drag 260 to 520):
-     - **Switch**, a 40px block: "SESSION" (activity icon) and, only when task-board is
+     - **Switch**, a 40px block: "SESSION" (activity icon) and, only when deck is
        installed, "TASKS" (check icon), equal-width pixel buttons 8px apart (13px icons, 8px
        labels). The active one is lit cyan.
      - **Session**: three framed cards 8px apart. Each card: 12px side padding, 10px top, 12px
@@ -148,7 +148,7 @@ terminals are drawn at opacity 0, so the picture shows through every gap.
          the agent's input box in VT323 18px, each after a pink ">", truncated; the last line
          white, the others muted. Empty: "> WAITING FOR OUTPUT_". A small "+" button (8px,
          2px `#7b2cbf` border, cyan on hover) at the top right.
-     - **Tasks**: the task-board mod in a framed box (fill `#120733e8`, 2px `#7b2cbf` border).
+     - **Tasks**: Deck's agents tab (mod `deck`, props `{tab: "agents"}`) in a framed box (fill `#120733e8`, 2px `#7b2cbf` border).
 
 3. **Score bar, 46px**: a framed strip (fill `#120733f0`) 8px below the columns, 34px tall,
    16px side padding, items 16px apart, labels 7px dim, values VT323 20px, 2×18px `#7b2cbf`
@@ -236,7 +236,7 @@ for the same agent.
 **What moves:** nothing animates. The Session panel re-reads the agent's screen every 4 s (not
 while TASKS is shown); the score bar re-reads the screen, CPU and RAM every 5 s (CPU appears from
 the second reading); the sidebar's "25s" labels refresh every 30 s. The TASKS tab appears within
-30 s of installing task-board.
+30 s of installing deck.
 
 ## Built from
 
@@ -275,7 +275,7 @@ root column
 │     └─ side-body  stack, active "side-session", "padding": null
 │        ├─ side-session block               arcade "session"
 │        └─ side-tasks   block, background #120733e8, border 2 #7b2cbf
-│                                            arcade "tasks" (switched to mod "task-board")
+│                                            arcade "tasks" (switched to mod "deck", tab agents)
 └─ status     block 46px                     arcade "status"
 ```
 
@@ -324,12 +324,12 @@ and show only under their parent unless pinned. Status from `agents()` when ther
 terminal's. The fold state lives in a `Set` on the sidebar copy.
 
 **Tasks tab.** The `sidetabs` copy runs `syncBoard` in `cx.spawn` at start and every 3 s; on the
-first run and every tenth (every 30 s) it checks for `${appHome()}/mods/task-board/mod.json`
-with `readTextFile`. When task-board exists and `side-tasks` doesn't name it, it runs
+first run and every tenth (every 30 s) it checks for `${appHome()}/mods/deck/mod.json`
+with `readTextFile`. When deck exists and `side-tasks` doesn't name it, it runs
 `exec("herdr-app", ["do", "layout.set", JSON.stringify({ layout })])` with a copy of `layout()`
-whose `side-tasks.content` is `{ "mod": "task-board" }`. When it's missing and `side-tasks` is
+whose `side-tasks.content` is `{ "mod": "deck", "props": { "tab": "agents" } }`. When it's missing and `side-tasks` is
 showing, it selects `side-session`. The TASKS button is drawn only while `side-tasks` names
-task-board. task-board lives at github.com/PsyChaos/herdr-mods and is not shipped with Herdr.
+deck. deck lives at github.com/PsyChaos/herdr-mods and is not shipped with Herdr.
 
 **The Files and Changes copies.** `mods/arcade-files` and `mods/arcade-changes` exist because
 the shipped panels have rounded corners and small text that look wrong in square pixel frames.
@@ -365,7 +365,7 @@ to `files`/`changes`; `side-body` to `side-session`/`side-tasks`).
 `machine-add` (`mod.open`); `files` and `changes` only as the source of the copies.
 
 **Programs run:** `hc read` (through `hc()`), and `herdr-app do layout.set` (through `exec`, only
-when task-board is installed and not yet in the layout). No network.
+when deck is installed and not yet in the layout). No network.
 
 **Art** (all original; no existing game's characters or sprites):
 - `arcade-bg.png` from `python3 art/background.py` (seed 1982): it writes `art/arcade-bg.svg`
@@ -412,11 +412,11 @@ when task-board is installed and not yet in the layout). No network.
   tasks and click handlers, followed by `cx.notify()`; `layout.set` is called from `cx.spawn`.
 - **A mod can't import another mod's code** (imports outside its folder are refused), so the
   task board can't be embedded and the shipped Files and Changes can't be restyled from Arcade:
-  the block has to name task-board, and the panels are copied.
+  the block has to name deck, and the panels are copied.
 - **Herdr refuses a layout that names a missing mod, whole.** So the shipped `side-tasks` block
-  names this mod (role `tasks`) and is switched to task-board only once
-  `mods/task-board/mod.json` exists; after the switch `layouts/arcade.json` names task-board,
-  and removing task-board later breaks the layout until the shipped file is put back. For the
+  names this mod (role `tasks`) and is switched to deck only once
+  `mods/deck/mod.json` exists; after the switch `layouts/arcade.json` names deck,
+  and removing deck later breaks the layout until the shipped file is put back. For the
   same reason `arcade-files` and `arcade-changes` must be installed with `arcade`.
 - **Inside a popup, `flex_1` children collapse to zero height.** The MESSAGES list gets an
   explicit height from `bellHeight` (44 header + 28 per section + 46 per row + 8, or 70 when
@@ -472,8 +472,8 @@ when task-board is installed and not yet in the layout). No network.
   cards.
 - An agent that runs `hc run --bg … claude "…"` shows the sub-agent indented under it with "└";
   clicking the row peeks it; folding hides it and shows "+1".
-- Without task-board only SESSION shows. Copy task-board into `mods/`: within 30 s TASKS
-  appears, `layouts/arcade.json`'s `side-tasks` names `task-board`, and the board shows in its
+- Without deck only SESSION shows. Copy deck into `mods/`: within 30 s TASKS
+  appears, `layouts/arcade.json`'s `side-tasks` names `deck`, and the board shows in its
   framed box.
 - With a long Claude session open, terminals stay responsive and keep their scroll position.
 - On Linux, CPU and RAM appear in the score bar within about 10 s.
