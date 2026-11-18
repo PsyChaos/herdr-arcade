@@ -33,15 +33,26 @@ herdr-app do layout.switch '{"name":"arcade"}'
 
 ## Tasks tab (optional)
 
-The right column gets a **TASKS** tab when the [task-board](https://github.com/PsyChaos/herdr-mods/tree/main/task-board)
-mod is installed: it lists the tasks your agents hand out to sub-agents (`hc run`), grouped under
-the agent that started them. Without it Arcade shows only the session panel.
+The right column gets a **TASKS** tab when the [deck](https://github.com/PsyChaos/herdr-mods/tree/main/deck)
+mod is installed: it shows Deck's agents tab there (every agent and the tasks it handed out to
+sub-agents with `hc run`, grouped under the agent that started them, and the finished ones).
+Without it Arcade shows only the Session panel.
 
-> add the mod github.com/PsyChaos/herdr-mods/tree/main/task-board
+Ask your agent in Herdr to add it:
 
-Arcade finds it within 30 seconds and adds the tab. It then writes `task-board` into
-`layouts/arcade.json`; if you remove task-board later, put that layout back from this repo too,
-or Herdr won't open it.
+> add the mod github.com/PsyChaos/herdr-mods/tree/main/deck
+
+Or copy it by hand:
+
+```sh
+git clone https://github.com/PsyChaos/herdr-mods
+cp -r herdr-mods/deck ~/.config/herdr-app/mods/
+```
+
+Arcade finds it within 30 seconds and adds the tab. It then writes `deck` (with `"tab": "agents"`)
+into `layouts/arcade.json`; if you remove deck later, put that layout back from this repo too,
+or Herdr won't open it. A `layouts/arcade.json` from an older version names `task-board`, which
+is now part of Deck: copy this repo's layout over it.
 
 ## What it reads
 
@@ -49,7 +60,7 @@ or Herdr won't open it.
   model, effort, context and token counts in Claude Code's status line, plus its recent shell
   commands and output.
 - **System files:** it reads `/proc/stat` and `/proc/meminfo` for the CPU and RAM meters.
-- **Layout:** when task-board is installed it runs `herdr-app do layout.set` to point the Tasks
+- **Layout:** when deck is installed it runs `herdr-app do layout.set` to point the Tasks
   block at it (once; again only if the block is put back).
 - **Network:** it makes no network requests.
 

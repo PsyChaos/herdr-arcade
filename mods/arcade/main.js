@@ -6,7 +6,7 @@
 //   "status"   the score bar: machine, stage (branch), players, CPU, RAM, score, START
 //   "pane"     each pane's header: program, folder, status chip, +, Files, Changes, menu
 //   "sidetabs" the right column's SESSION / TASKS switch
-//   "bell"     the MESSAGES popup;  "tasks" stands in for task-board until it is found
+//   "bell"     the MESSAGES popup;  "tasks" stands in for deck until it is found
 // Run details (model, effort, context, tokens) come from the agent's own screen
 // (`hc read`): a Claude Code status line like extras/claude-statusline.sh prints.
 
@@ -87,10 +87,12 @@ function bellHeight(list, tabOf) {
   return Math.min(BELL.max, BELL.head + (n ? groups * BELL.label + n * BELL.row + 8 : BELL.empty) + 4);
 }
 
-// The TASKS tab shows the task-board mod (github.com/PsyChaos/herdr-mods) when it is
+// The TASKS tab shows Deck's agents tab (deck mod, github.com/PsyChaos/herdr-mods) when it is
 // installed. The shipped layout names only this mod there, because a layout naming a
-// missing mod is refused as a whole; once task-board is found, the block is switched to it.
-const BOARD = "task-board";
+// missing mod is refused as a whole; once deck is found, the block is switched to it.
+const BOARD = "deck"; // Deck's agents tab, shown alone (github.com/PsyChaos/herdr-mods)
+const BOARD_CONTENT = { mod: BOARD, props: { tab: "agents" } };
+const named = (block) => block?.content?.mod === BOARD && block.content.props?.tab === "agents";
 function withContent(node, id, content) {
   if (node?.id === id) return { ...node, content };
   return node?.children ? { ...node, children: node.children.map((c) => withContent(c, id, content)) } : node;
@@ -538,7 +540,7 @@ export default class Arcade extends View {
         : div().h(BELL.empty).flex_none().flex().items_center().justify_center().child(pt("NO MESSAGES", 8, C.dim)));
   }
 
-  // Points the TASKS block at task-board once it is installed (the file is looked at every 30 s,
+  // Points the TASKS block at Deck's agents tab once it is installed (the file is looked at every 30 s,
   // the layout every 3 s), and leaves the TASKS tab out when it is not.
   async syncBoard(cx) {
     if (this.syncing) return;
@@ -548,8 +550,8 @@ export default class Arcade extends View {
         this.board = (await readTextFile(`${appHome()}/mods/${BOARD}/mod.json`).catch(() => null)) != null;
       const root = layout();
       const block = find(root, "side-tasks");
-      if (this.board && block && block.content?.mod !== BOARD)
-        await exec("herdr-app", ["do", "layout.set", JSON.stringify({ layout: withContent(root, "side-tasks", { mod: BOARD }) })]).catch(() => null);
+      if (this.board && block && !named(block))
+        await exec("herdr-app", ["do", "layout.set", JSON.stringify({ layout: withContent(root, "side-tasks", BOARD_CONTENT) })]).catch(() => null);
       else if (!this.board && find(root, "side-body")?.active === "side-tasks")
         run("layout.select", { stack: "side-body", child: "side-session" });
       cx.notify();
@@ -559,7 +561,7 @@ export default class Arcade extends View {
   // ------------------------------------------------------------ right column switch
   sidetabs(cx) {
     const active = find(layout(), "side-body")?.active ?? "side-session";
-    const tasks = find(layout(), "side-tasks")?.content?.mod === BOARD; // TASKS only with task-board installed
+    const tasks = named(find(layout(), "side-tasks")); // TASKS only with deck installed
     const seg = (id, child, ic, label) => {
       const on = active === child;
       return div().flex_1().child(button(id, h_flex().gap(8).items_center().child(icon(ic, 13, on ? C.night : C.muted)).child(pt(label, 8, on ? C.night : C.muted)),
